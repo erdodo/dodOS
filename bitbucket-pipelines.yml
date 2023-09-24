@@ -6,6 +6,6 @@ pipelines:
         clone:
           enabled: false
         script:
-          - git clone --bare git@bitbucket.org:https://github.com/erdodo/dodOS.git
+          - git clone --bare git@bitbucket.org:erdod0/dodos.git
           - cd dodOS.git
-          - git push --mirror git@github.com:https://github.com/erdodo/dodOS.git
+          - git push --mirror git@github.com:erdodo/dodOS.git
