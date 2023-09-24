@@ -1,7 +1,30 @@
-clone:
-  depth: full
-pipelines:
-  default:
-    - step:
+image: alpine/git:1.0.26 
+  
+definitions:
+  services:
+    docker:
+      memory: 1024
+  
+  steps:
+    - step: &Push-to-GitHub
+        name: Push code changes to GitHub
+        services:
+          - docker
+        caches:
+          - docker
         script:
-          - git push --mirror git@github.com:erdodo/dodOS.git
+          - git remote add github "git@github.com:erdodo/dodOS.git"
+          - git checkout $BITBUCKET_BRANCH
+          - git pull
+          - git push github $BITBUCKET_BRANCH
+
+pipelines:
+  branches:
+    master:
+      - step: *Push-to-GitHub
+    sandbox:
+      - step: *Push-to-GitHub              
+    staging:
+      - step: *Push-to-GitHub              
+    production:
+      - step: *Push-to-GitHub  
