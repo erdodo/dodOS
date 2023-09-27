@@ -2,7 +2,7 @@ import {get_data, set_data} from '../db'
 export default async function handler (req:any, res:any) {
     const id = req.query.id;
     let datas ={}
-    await get_data(req.query.collection).then(async(data)=>{
+    await get_data(req.query.collection,[{key:"id",if:"==",value:id}]).then(async(data)=>{
         datas = data
         datas= {
             ...req.body,

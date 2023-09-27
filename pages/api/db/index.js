@@ -51,7 +51,6 @@ export const get_data = async(collection,filters,orFilters,order,orderDesc = fal
             Object.values(val).map((orVal)=>{
                     orFilterArray.push(Filter.where(orVal.key,orVal.if,orVal.value))
             })
-            console.log(orFilterArray)
             docRef = docRef.where(Filter.or(...orFilterArray))
         })
     }
@@ -60,7 +59,7 @@ export const get_data = async(collection,filters,orFilters,order,orderDesc = fal
     if(order){
         docRef = docRef.orderBy(order,orderDesc ? "desc" : "asc")
     }else{
-        //docRef=docRef.where("isDeleted","==",false)
+        docRef=docRef.where("isDeleted","==",false)
     }
     docRef = limit ? docRef.limit(parseInt(limit)) : docRef
     return await docRef.get().then((querySnapshot) => {
