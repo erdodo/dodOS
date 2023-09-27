@@ -1,5 +1,5 @@
 import { initializeApp, cert,getApps } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore,Filter } from 'firebase-admin/firestore';
 
 const firebaseConfig = {
     "type": "service_account",
@@ -20,11 +20,67 @@ getApps().length===0 ? initializeApp({
     credential: cert(firebaseConfig)
 }) : null;
 
+/**
+ * < less than
+ * <= less than or equal to
+ * == equal to
+ * > greater than
+ * >= greater than or equal to
+ * != not equal to
+ * array-contains
+ * array-contains-any
+ * in
+ * not-in
+ */
+
+export const get_data = async(collection,filters,orFilters,order,orderDesc = false,limit)=>{
+    const db = getFirestore();
+    let docRef = db.collection(collection)
 
 
-export const get_data = async(collection,document)=>{
+
+    if(filters){
+        Object.values(filters).map((val)=>{
+            docRef = docRef.where(val.key,val.if,val.value)
+        })
+    }
+
+    if(orFilters){
+        Object.values(orFilters).map((val)=>{
+            const orFilterArray = []
+            Object.values(val).map((orVal)=>{
+                    orFilterArray.push(Filter.where(orVal.key,orVal.if,orVal.value))
+            })
+            docRef = docRef.where(Filter.or(...orFilterArray))
+        })
+    }
+
+
+    if(order){
+        docRef = docRef.orderBy(order,orderDesc ? "desc" : "asc")
+    }else{
+        docRef=docRef.where("isDeleted","==",false)
+    }
+    docRef = limit ? docRef.limit(parseInt(limit)) : docRef
+    return await docRef.get().then((querySnapshot) => {
+        const data = []
+        querySnapshot.forEach(doc => {
+            data.push({id : doc.id,...doc})
+        });
+        return data
+    }).catch(error => {
+        console.log(error)
+        return []
+    });
+}
+
+
+export const set_data = async(collection,document,data)=>{
     const db = getFirestore();
     const docRef = db.collection(collection).doc(document);
-
-    return await docRef.get()
+    return await docRef.set(data,{merge:true})
 }
+
+
+
+
