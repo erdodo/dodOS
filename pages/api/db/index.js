@@ -58,8 +58,6 @@ export const get_data = async(collection,filters,orFilters,order,orderDesc = fal
 
     if(order){
         docRef = docRef.orderBy(order,orderDesc ? "desc" : "asc")
-    }else{
-        docRef=docRef.where("isDeleted","==",false)
     }
     docRef = limit ? docRef.limit(parseInt(limit)) : docRef
     return await docRef.get().then((querySnapshot) => {
@@ -68,6 +66,21 @@ export const get_data = async(collection,filters,orFilters,order,orderDesc = fal
             data.push({id : doc.id,...doc})
         });
         return data
+    }).catch(error => {
+        console.log(error)
+        return []
+    });
+}
+export const get_doc = async(collection,doc)=>{
+    const db = getFirestore();
+    let docRef = db.collection(collection).doc(doc)
+
+
+
+
+    return await docRef.get().then((querySnapshot) => {
+
+        return querySnapshot
     }).catch(error => {
         console.log(error)
         return []
