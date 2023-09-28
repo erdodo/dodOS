@@ -1,5 +1,5 @@
-image: alpine/git:1.0.26 
-  
+image: alpine/git:1.0.26, atlassian/default-image:3
+
 definitions:
   services:
     docker:
@@ -18,7 +18,19 @@ definitions:
           - git pull
           - git push github $BITBUCKET_BRANCH
 
+
+  
 pipelines:
+  default:
+    - step:
+        name: Run automated API tests using Postman CLI
+        script:
+          # Install Postman CLI
+          - curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+          # Login using your API Key
+          - postman login --with-api-key $POSTMAN_API_KEY
+          # Run your collection using Postman CLI
+          - postman collection run "17278905-ac60b8c1-14a4-4caf-80c6-d780d6cc56b8" -e "17278905-759251b2-6c6e-4bd7-aa6a-5451314f6e79"
   branches:
     master:
       - step: *Push-to-GitHub
