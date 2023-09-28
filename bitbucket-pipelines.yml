@@ -1,4 +1,4 @@
-image: alpine/git:1.0.26, atlassian/default-image:3
+
 
 definitions:
   services:
@@ -8,6 +8,7 @@ definitions:
   steps:
     - step: &Push-to-GitHub
         name: Push code changes to GitHub
+        image: alpine/git:1.0.26
         services:
           - docker
         caches:
@@ -24,6 +25,7 @@ pipelines:
   default:
     - step:
         name: Run automated API tests using Postman CLI
+        image: atlassian/default-image:3
         script:
           # Install Postman CLI
           - curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
