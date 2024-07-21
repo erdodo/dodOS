@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  server:
+    image: ghcr.io/esphome/esphome
+    network_mode: host
+    volumes:
+      - /DodOS/esphome/data:/config
+    restart: on-failure
+    container_name: esphome
+

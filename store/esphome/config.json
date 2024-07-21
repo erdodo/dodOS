@@ -1,0 +1,6 @@
+{
+    "name": "esphome",
+    "description": "Esphome image ",
+    "photos":["http://url","http://url"],
+    "version": "latest"
+    }
