@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.1.50:5000/api'; 
+const API_BASE_URL = process.env.API_URL 
 // Yedek Listeleme
 export const listBackups = async (): Promise<any[]> => {
     const response = await fetch(`${API_BASE_URL}/backup/list`);

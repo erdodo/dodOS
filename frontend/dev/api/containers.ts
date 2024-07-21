@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.1.50:5000/api'; // API temel URL'si
+const API_BASE_URL = process.env.API_URL
 
 import { Container } from "@/models";
 import toast from 'react-hot-toast';

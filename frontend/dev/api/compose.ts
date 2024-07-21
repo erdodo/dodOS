@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000'; // API temel URL'si
+const API_BASE_URL = process.env.API_URL
 
 // Compose dosyalarını listele
 export const listComposes = async (): Promise<any[]> => {
